@@ -1,0 +1,20 @@
+<!-- main nav -->
+<nav *ngIf="account" class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" routerLink="/">Home</a>
+            <a class="nav-item nav-link" routerLink="/profile">Profile</a>
+            <a *ngIf="account.role === 'Admin'" class="nav-item nav-link" routerLink="/admin">Admin</a>
+            <button class="nav-item nav-link btn btn-link" (click)="logout()">Logout</button>
+        </div>
+    </div>
+</nav>
+
+<!-- subnav outlet -->
+<router-outlet name="subnav"></router-outlet>
+
+<!-- alert component -->
+<alert></alert>
+
+<!-- main outlet -->
+<router-outlet></router-outlet>
