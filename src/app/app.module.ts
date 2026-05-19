@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { environment } from '@environments/environment';
 import { fakeBackendProvider } from './_helpers/fake-backend';
 import { AppRoutingModule } from './app-routing.module';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
@@ -13,6 +12,7 @@ import { AccountService } from './_services/account.service';
 import { AppComponent } from './app.component';
 import { AlertComponent } from './_components/alert.component';
 import { HomeComponent } from './home/home.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
