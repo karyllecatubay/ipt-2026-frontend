@@ -25,7 +25,10 @@ export class VerifyEmailComponent implements OnInit {
     ngOnInit() {
         const token = this.route.snapshot.queryParams['token'];
 
-        this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
+        if (!token) {
+            this.emailStatus = EmailStatus.Failed;
+            return;
+        }
 
         this.accountService.verifyEmail(token)
             .pipe(first())
