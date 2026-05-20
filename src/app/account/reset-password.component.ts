@@ -31,9 +31,6 @@ export class ResetPasswordComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        console.log('RESET PASSWORD COMPONENT LOADED');
-        console.log('TOKEN:', this.route.snapshot.queryParams['token']);
-
         this.form = this.formBuilder.group({
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', Validators.required],
@@ -41,20 +38,25 @@ export class ResetPasswordComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
 
-        const token = this.route.snapshot.queryParams['token'];
+        // Read token from URL directly as fallback
+        const token = this.route.snapshot.queryParams['token'] || 
+                      new URLSearchParams(window.location.search).get('token');
+
+        console.log('RESET PASSWORD COMPONENT LOADED');
+        console.log('TOKEN:', token);
 
         if (!token) {
             this.tokenStatus = TokenStatus.Invalid;
             return;
         }
 
+        this.token = token;
+
         this.accountService.validateResetToken(token)
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.token = token;
                     this.tokenStatus = TokenStatus.Valid;
-                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 },
                 error: () => {
                     this.tokenStatus = TokenStatus.Invalid;
