@@ -38,12 +38,15 @@ export class ResetPasswordComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
 
-        // Read token from URL directly as fallback
-        const token = this.route.snapshot.queryParams['token'] || 
+        // Try all possible ways to get the token
+        const token = this.route.snapshot.queryParams['token'] ||
+                      this.route.parent?.snapshot.queryParams['token'] ||
                       new URLSearchParams(window.location.search).get('token');
 
         console.log('RESET PASSWORD COMPONENT LOADED');
         console.log('TOKEN:', token);
+        console.log('FULL URL:', window.location.href);
+        console.log('SEARCH:', window.location.search);
 
         if (!token) {
             this.tokenStatus = TokenStatus.Invalid;
