@@ -31,6 +31,9 @@ export class ResetPasswordComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        console.log('RESET PASSWORD COMPONENT LOADED');
+        console.log('TOKEN:', this.route.snapshot.queryParams['token']);
+
         this.form = this.formBuilder.group({
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', Validators.required],
@@ -63,13 +66,8 @@ export class ResetPasswordComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-
         this.alertService.clear();
-
-        if (this.form.invalid) {
-            return;
-        }
-
+        if (this.form.invalid) return;
         this.loading = true;
         this.accountService.resetPassword(this.token!, this.f.password.value, this.f.confirmPassword.value)
             .pipe(first())
