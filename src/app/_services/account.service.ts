@@ -64,6 +64,7 @@ export class AccountService {
     }
 
     validateResetToken(token: string) {
+        console.log('CALLING VALIDATE RESET TOKEN:', token);
         return this.http.post(`${baseUrl}/validate-reset-token`, { token });
     }
 
