@@ -40,7 +40,10 @@ export class ResetPasswordComponent implements OnInit {
 
         const token = this.route.snapshot.queryParams['token'];
 
-        this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
+        if (!token) {
+            this.tokenStatus = TokenStatus.Invalid;
+            return;
+        }
 
         this.accountService.validateResetToken(token)
             .pipe(first())
@@ -48,6 +51,7 @@ export class ResetPasswordComponent implements OnInit {
                 next: () => {
                     this.token = token;
                     this.tokenStatus = TokenStatus.Valid;
+                    this.router.navigate([], { relativeTo: this.route, replaceUrl: true });
                 },
                 error: () => {
                     this.tokenStatus = TokenStatus.Invalid;
