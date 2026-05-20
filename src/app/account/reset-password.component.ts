@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -27,7 +27,8 @@ export class ResetPasswordComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit() {
@@ -38,18 +39,13 @@ export class ResetPasswordComponent implements OnInit {
             validator: MustMatch('password', 'confirmPassword')
         });
 
-        // Try all possible ways to get the token
         const token = this.route.snapshot.queryParams['token'] ||
                       this.route.parent?.snapshot.queryParams['token'] ||
                       new URLSearchParams(window.location.search).get('token');
 
-        console.log('RESET PASSWORD COMPONENT LOADED');
-        console.log('TOKEN:', token);
-        console.log('FULL URL:', window.location.href);
-        console.log('SEARCH:', window.location.search);
-
         if (!token) {
             this.tokenStatus = TokenStatus.Invalid;
+            this.cdr.detectChanges();
             return;
         }
 
@@ -60,9 +56,11 @@ export class ResetPasswordComponent implements OnInit {
             .subscribe({
                 next: () => {
                     this.tokenStatus = TokenStatus.Valid;
+                    this.cdr.detectChanges();
                 },
                 error: () => {
                     this.tokenStatus = TokenStatus.Invalid;
+                    this.cdr.detectChanges();
                 }
             });
     }
